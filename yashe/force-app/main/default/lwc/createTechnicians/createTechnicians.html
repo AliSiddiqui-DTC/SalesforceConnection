@@ -1,0 +1,36 @@
+<!--
+  @description       : 
+  @author            : Ali Siddiqui
+  @group             : 
+  @last modified on  : 08-12-2024
+  @last modified by  : Ali Siddiqui
+  Modifications Log
+  Ver   Date         Author         Modification
+  1.0   08-12-2024   Ali Siddiqui   Initial Version
+-->
+
+<template>
+    <lightning-card title="Add Technicians">
+        <div class="slds-p-around_medium">
+            <template if:true={workOrders}>
+                <template for:each={workOrders} for:item="workorder">
+                    <div key={workorder.value} class="slds-m-bottom_medium">
+                        
+                        <div class="slds-p-horizontal_small">
+                            <c-custom-multi-pick-list 
+                                label={workorder.label} 
+                                required="true" 
+                                showpills="true" 
+                                role={workorder.label}>
+                            </c-custom-multi-pick-list>
+                        </div>
+                    </div>
+                </template>
+                <lightning-button label="Add Technicians" onclick={handleSave} class="slds-m-top_medium"></lightning-button>
+            </template>
+            <template if:true={error}>
+                <p>{error}</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
