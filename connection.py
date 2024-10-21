@@ -1,7 +1,22 @@
 from simple_salesforce import Salesforce
 import logging
+import configparser
+import os
 
-def connect_to_salesforce(username, password, security_token, instance_url):
+def connect_to_salesforce():
+    config = configparser.ConfigParser()
+    config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
+    
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Config file not found. Please create {config_path} based on config.ini.template")
+    
+    config.read(config_path)
+
+    username = config.get('salesforce', 'username')
+    password = config.get('salesforce', 'password')
+    security_token = config.get('salesforce', 'security_token')
+    instance_url = config.get('salesforce', 'instance_url')
+
     try:
         sf = Salesforce(
             username=username,
@@ -22,13 +37,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     # Use environment variables or a config file for sensitive information
-    import os
-    username = os.environ.get("SF_USERNAME", "saquib.dtc@yshe.prod.dev")
-    password = os.environ.get("SF_PASSWORD", "G&6IFa5E^G^pwuyq")
-    security_token = os.environ.get("SF_SECURITY_TOKEN", "h7SYqJdiVPe7wi6grHUOiGfF")
-    instance_url = os.environ.get("SF_INSTANCE_URL", "https://yhse--dev.sandbox.lightning.force.com")
-    
-    sf_connection = connect_to_salesforce(username, password, security_token, instance_url)
+    sf_connection = connect_to_salesforce()
     
     if sf_connection:
         # You can now use sf_connection to interact with Salesforce
